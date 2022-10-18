@@ -1,6 +1,5 @@
-import { ChangeEvent, useContext, useState } from "react";
-import { AesLayout } from "../../components/layouts";
-import { NextPage } from "next";
+import { ChangeEvent, useContext, useState } from "react"
+import { NextPage } from "next"
 import {
   Box,
   Button,
@@ -17,97 +16,99 @@ import {
   Alert,
   AlertTitle,
   Stack,
-} from "@mui/material";
+} from "@mui/material"
+import Swal from "sweetalert2"
+import NextLink from "next/link"
+import { useForm, SubmitHandler } from "react-hook-form"
 
-// import sweetalert2
-import Swal from "sweetalert2";
-
-import NextLink from "next/link";
-
-import { encrypt, decrypt } from "../../utils/AES";
-import { AuthContext } from "../../context";
-
-import { useForm, SubmitHandler } from "react-hook-form";
-import { aesName } from "../../api";
+import { AesLayout } from "../../components/layouts"
+import { encrypt, decrypt } from "../../utils/AES"
+import { AuthContext } from "../../context"
+import { aesName } from "../../api"
 
 type FormData = {
-  user: string;
-  type: string;
-  cipher: number;
-  message: string;
-  messagein: string;
-  key: string;
-};
+  user: string
+  type: string
+  cipher: number
+  message: string
+  messagein: string
+  key: string
+}
 
 export const CipherPage: NextPage = () => {
-  const { user, isLoggedIn, logout } = useContext(AuthContext);
+  const { user, isLoggedIn, logout } = useContext(AuthContext)
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>()
 
-  const [value, setValue] = useState("message");
-  const [value1, setValue1] = useState("cifrar");
-  const [currency, setCurrency] = useState(128);
+  const [value, setValue] = useState("message")
+  const [value1, setValue1] = useState("cifrar")
+  const [currency, setCurrency] = useState(128)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
-  };
+    setValue((event.target as HTMLInputElement).value)
+  }
 
   const handleChange1 = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue1((event.target as HTMLInputElement).value);
-  };
+    setValue1((event.target as HTMLInputElement).value)
+  }
 
   const handleChange2 = (event: ChangeEvent<HTMLInputElement>) => {
-    setCurrency(Number((event.target as HTMLInputElement).value));
-  };
+    setCurrency(Number((event.target as HTMLInputElement).value))
+  }
+
+  const alertSuccessSweet = (
+    message: String,
+    messagein: String,
+    key: String
+  ) => {
+    Swal.fire(
+      "Realizado!",
+      `Tu mensaje es: ${message},\n con llave: ${key},\n su mensaje cifrado es: ${messagein}\n,
+      fue guardado en la base de datos`,
+      "success"
+    )
+  }
 
   const onSubmitCifrar = async (data: FormData) => {
-    const { message, key } = data;
-    let res = encrypt(message, key);
-    const obj = {
+    const { message, key } = data
+    let { messageinF } = encrypt(message, key)
+    const objEnc = {
       user: user?.name || user?.email || "",
       type: value,
       cipher: currency,
       message,
-      messagein: res.messagein,
+      messagein: messageinF,
       key,
-    };
-    try {
-      const { data } = await aesName.post("/cipher/", obj);
-      alertSuccess(obj.message, obj.messagein, obj.key);
-    } catch (error) {
-      console.log(error);
     }
-  };
+    try {
+      await aesName.post("/cipher/", objEnc)
+      alertSuccessSweet(objEnc.message, objEnc.messagein, objEnc.key)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const onSubmitDescifrar = async (data: FormData) => {
-    const { message, key } = data;
-    let res = decrypt(message, key);
-    const obj = {
+    const { message, key } = data
+    let { messageF } = decrypt(message, key)
+    const objDec = {
       user: user?.name || user?.email || "",
       type: value,
       cipher: currency,
-      message: res.messageF,
+      message: messageF,
       messagein: message,
       key,
-    };
-    try {
-      const { data } = await aesName.post("/cipher/", obj);
-      alertSuccess(obj.message, obj.messagein, obj.key);
-    } catch (error) {
-      console.log(error);
     }
-  };
-
-  const alertSuccess = (message, messagein, key) => {
-    Swal.fire(
-      "Realizado!",
-      `Tu mensaje es: ${message}\n, con llave: ${messagein}\n, su mensaje cifrado es: ${key}\n, fue guardado en la base de datos`,
-      "success"
-    );
-  };
+    try {
+      await aesName.post("/cipher/", objDec)
+      alertSuccessSweet(objDec.message, objDec.messagein, objDec.key)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <AesLayout
@@ -341,7 +342,7 @@ export const CipherPage: NextPage = () => {
         </Box>
       )}
     </AesLayout>
-  );
-};
+  )
+}
 
-export default CipherPage;
+export default CipherPage

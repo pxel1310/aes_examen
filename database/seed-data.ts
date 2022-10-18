@@ -39,5 +39,23 @@ export const initialData: SeedData = {
       key: "12345678",
       userCreated: "Ian Ayala",
     },
+    {
+      user: "Example User",
+      type: "message",
+      cipher: 256,
+      message: "Hello World",
+      messagein: '"U2FsdGVkX19iMs8lIuPv6BYGx4jA+stVGefKRjP8BCc="',
+      key: "12345678123456781234567812345678",
+      userCreated: "Example User",
+    },
+    {
+      user: "Example User",
+      type: "file",
+      cipher: 192,
+      message: "Esto es un archivo",
+      messagein: '"U2FsdGVkX19iMs8lIuPv6BYGx4jA+stVGefKRjP8BCc="',
+      key: "1234567812345678",
+      userCreated: "Example User",
+    }
   ],
 };

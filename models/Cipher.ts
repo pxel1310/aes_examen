@@ -1,5 +1,5 @@
-import mongoose, { Schema, model, Model } from "mongoose";
-import { ICipher } from "../interfaces";
+import mongoose, { Schema, model, Model } from "mongoose"
+import { ICipher } from "../interfaces"
 
 const cipherSchema = new Schema(
   {
@@ -14,9 +14,9 @@ const cipherSchema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
 const Cipher: Model<ICipher> =
-  mongoose.models.Cipher || model("Cipher", cipherSchema);
+  mongoose.models.Cipher || model("Cipher", cipherSchema)
 
-export default Cipher;
+export default Cipher

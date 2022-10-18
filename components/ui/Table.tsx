@@ -106,9 +106,7 @@ interface Props {
 export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { user, isLoggedIn, logout } = useContext(AuthContext);
-
-  console.log(ciphers);
+  const { user} = useContext(AuthContext);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -119,7 +117,8 @@ export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
     setPage(0);
   };
 
-  let rows = ciphers.map((cipher, id) => {
+  let rows: any
+   = ciphers.map((cipher:any, id:number) => {
     return createData(
       id,
       cipher.cipher,
@@ -130,7 +129,6 @@ export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
     );
   });
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
@@ -185,7 +183,6 @@ export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
             <TextField
               type="text"
               value={row.message}
-              //ocultar el mensaje
               hidden
               disabled
             />
