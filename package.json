@@ -1,0 +1,47 @@
+{
+  "author": {
+    "name": "Ian Ayala",
+    "email": "ayala.gonzalez.ian@gmail.com"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.4.1",
+    "@mui/material": "^5.4.1",
+    "@mui/x-data-grid": "^5.5.1",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/crypto-js": "^4.1.1",
+    "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.1.1",
+    "js-cookie": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.1",
+    "next": "12.0.10",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.27.1",
+    "react-slideshow-image": "^3.7.0",
+    "sweetalert2": "^11.5.2",
+    "swr": "^1.2.1"
+  },
+  "description": "Examen AES",
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.1",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "17.0.17",
+    "@types/react": "17.0.39",
+    "eslint": "8.9.0",
+    "eslint-config-next": "12.0.10",
+    "typescript": "4.5.5"
+  },
+  "license": "ISC",
+  "name": "aes-examen",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}
