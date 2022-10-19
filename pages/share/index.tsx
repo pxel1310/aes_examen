@@ -1,23 +1,27 @@
 import NextLink from "next/link";
 import { useContext } from "react";
-import { Box, Divider, Grid, Link, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Grid,
+  Link,
+  Typography,
+  FormControl,
+  InputLabel, Input, InputAdornment, TextField,
+} from "@mui/material";
 
 import { AuthContext } from "../../context";
+import { useAllUsers, useCipher } from "../../hooks";
+import { FullScreenLoading } from "../../components/ui";
 import UserAllTable from "../../components/ui/TableMap";
 import { AesLayout } from "../../components/layouts";
 import StickyHeadTable from "../../components/ui/Table";
-import { NextPage } from "next";
-import { GetServerSideProps } from "next";
-import { dbcipher } from "../../database";
 
-interface Props {
-  data: any[];
-  users: any[];
-}
-
-const SharePage: NextPage<Props> = ({ data, users }) => {
+export const SharePage = () => {
   const { user, isLoggedIn } = useContext(AuthContext);
-  data = data.filter((item) => item.user == user?.name);
+
+  const { data, isLoading } = useCipher(`${user?.name}`);
+  const { users, isLoadingAll } = useAllUsers();
 
   return (
     <AesLayout
@@ -66,12 +70,22 @@ const SharePage: NextPage<Props> = ({ data, users }) => {
                 maxWidth: "92rem",
               }}
             >
-              <StickyHeadTable ciphers={data} />
-
+              {isLoading ? (
+                <FullScreenLoading />
+              ) : (
+                // @ts-ignore
+                <StickyHeadTable ciphers={data} />
+              )}
               <br />
               <Divider sx={{ my: 2 }} />
 
-              <UserAllTable users={users} />
+              {isLoadingAll ? (
+                <FullScreenLoading />
+              ) : (
+                // @ts-ignore
+
+                <UserAllTable users={users} />
+              )}
 
               <br />
               <Divider sx={{ my: 2 }} />
@@ -110,18 +124,6 @@ const SharePage: NextPage<Props> = ({ data, users }) => {
       )}
     </AesLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const data = await dbcipher.getCipher();
-  const users = await dbcipher.getAllUsers();
-
-  return {
-    props: {
-      data,
-      users,
-    },
-  };
 };
 
 export default SharePage;
