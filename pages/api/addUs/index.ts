@@ -3,18 +3,15 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../database";
 import { Cipher } from "../../../models";
 
-type Data =
-  | { message: string }
-  | {
-      cipher: {
-        user: string;
-        type: string;
-        cipher: number;
-        message: string;
-        messagein: string;
-        key: string;
-      };
-    };
+type Find = {
+  user: string;
+  type: string;
+  cipher: number;
+  message: string;
+  messagein: string;
+  key: string;
+  userCreated: string;
+};
 
 const addUsu = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   let { newuserf, messagef, userf } = req.body as {
@@ -25,17 +22,26 @@ const addUsu = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
   await db.connect();
 
-  // Crear un nuevo cifrado con los datos del usuario
 
-  let cipher = await Cipher.findOne({ user: userf, message: messagef });
-
-  let newCipher = new Cipher({
-    ...cipher,
+  const cipherF: Find = await Cipher.findOne({
+    message: messagef,
+    user: userf,
   });
 
+  let obj: Find = {
+    user: newuserf,
+    type: cipherF.type,
+    cipher: cipherF.cipher,
+    message: cipherF.message,
+    messagein: cipherF.messagein,
+    key: cipherF.key,
+    userCreated: cipherF.userCreated,
+  };
+
+  const cipher = new Cipher(obj);
+
   try {
-    newCipher.user = newuserf;
-    await newCipher.save();
+    await cipher.save();
     return res.status(200).json({ message: "Cifrado actualizado" });
   } catch (error) {
     return res

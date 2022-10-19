@@ -1,7 +1,8 @@
-import { ChangeEvent, FC, useContext, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 
 import { ICipher } from "../../interfaces";
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -10,12 +11,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
+  Typography,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { AuthContext } from "../../context";
-import { aesName } from "../../api";
-import Swal from "sweetalert2";
+
+import { EliminarTable, ShareTable } from "./";
 
 interface Column {
   id:
@@ -25,7 +24,8 @@ interface Column {
     | "message"
     | "messagein"
     | "userCreated"
-    | "buttons";
+    | "eliminar"
+    | "share";
   label: string;
   minWidth?: number;
   maxWidth?: number;
@@ -65,9 +65,15 @@ const columns: readonly Column[] = [
     align: "center",
   },
   {
-    id: "buttons",
+    id: "eliminar",
     label: "Acciones",
-    minWidth: 275,
+    minWidth: 75,
+    align: "center",
+  },
+  {
+    id: "share",
+    label: "Compartir",
+    minWidth: 75,
     align: "center",
   },
 ];
@@ -106,7 +112,6 @@ interface Props {
 export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { user} = useContext(AuthContext);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -117,8 +122,7 @@ export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
     setPage(0);
   };
 
-  let rows: any
-   = ciphers.map((cipher:any, id:number) => {
+  let rows = ciphers.map((cipher, id) => {
     return createData(
       id,
       cipher.cipher,
@@ -128,92 +132,24 @@ export const StickyHeadTable: FC<Props> = ({ ciphers }) => {
       cipher.userCreated
     );
   });
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-
-  const [message, setMessage] = useState("");
-  const [share, setShare] = useState("");
-
-  const onSubmit = async (data: FormData) => {
-    if (message && share == "") {
-      const obj = {
-        user: user?.name,
-        message: message,
-      };
-
-      try {
-        const { data } = await aesName.post("/eliminarC/", obj);
-        Swal.fire(
-          "Mensaje Eliminado",
-          `El mensaje ${message} ha sido eliminado, por favor Recargar la pagina`,
-          "success"
-        );
-      } catch (error) {
-        Swal.fire("Error", `${error}`, "error");
-      }
-    }
-
-    if (share) {
-      const obj = {
-        userf: share,
-        newuserf: message,
-        messagef: user?.name,
-      };
-      try {
-        const { data } = await aesName.post("/addUs/", obj);
-        Swal.fire(
-          "Mensaje Compartido",
-          `El mensaje ${message} ha sido compartido con ${share}`,
-          "success"
-        );
-      } catch (error) {
-        Swal.fire("Error", `${error}`, "error");
-      }
-    }
-  };
 
   rows = rows.map((row) => {
     return {
       ...row,
-      buttons: (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex justify-center">
-            <TextField
-              type="text"
-              value={row.message}
-              hidden
-              disabled
-            />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              type="submit"
-              onClick={() => {
-                setMessage(row.message);
-              }}
-            >
-              Eliminar
-            </button>
-
-            <TextField type="text" onChange={(e) => setShare(e.target.value)} />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              type="submit"
-            >
-              Compartir
-            </button>
-          </div>
-        </form>
+      eliminar: (
+        <>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <EliminarTable messageAr={row.message} />
+          </Box>
+        </>
       ),
-    };
-  });
-
-  let columnsTable = columns.map((column) => {
-    return {
-      field: column.id,
-      headerName: column.label,
-      width: column.minWidth,
+      share: (
+        <>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <ShareTable messageAr={row.message} />
+          </Box>
+        </>
+      ),
     };
   });
 

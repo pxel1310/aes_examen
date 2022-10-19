@@ -1,4 +1,7 @@
 import {
+  Box,
+  Button,
+  FormControl,
   Paper,
   Table,
   TableBody,
@@ -7,8 +10,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
 } from "@mui/material";
 import { ChangeEvent, FC, useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import Mess from "./Mess";
+import { AuthContext } from "../../context";
 
 interface UserAll {
   name: string;
@@ -16,11 +23,16 @@ interface UserAll {
 }
 
 interface Column {
-  id: "name" | "email";
+  id: "name" | "email" | "message";
   label: string;
   minWidth?: number;
   align?: "center";
 }
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 const columns: readonly Column[] = [
   {
@@ -31,6 +43,12 @@ const columns: readonly Column[] = [
   {
     id: "name",
     label: "Nombre",
+    minWidth: 255,
+    align: "center",
+  },
+  {
+    id: "message",
+    label: "Mensaje Normal",
     minWidth: 255,
     align: "center",
   },
@@ -48,10 +66,9 @@ interface Props {
 }
 
 export const UserAllTable: FC<Props> = ({ users }) => {
+  const { user } = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  console.log(users);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -64,6 +81,13 @@ export const UserAllTable: FC<Props> = ({ users }) => {
 
   let rows = users.map((cipher) => {
     return createData(cipher.name, cipher.email);
+  });
+
+  rows = rows.map((row) => {
+    return {
+      ...row,
+      message: user?.name != row.name ? <Mess messageAr={row.name} /> : <></>,
+    };
   });
 
   return (

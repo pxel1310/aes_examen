@@ -1,21 +1,28 @@
-import { AesLayout } from "../../components/layouts";
-import StickyHeadTable from "../../components/ui/Table";
-import { Box, Divider, Grid, Link, Typography } from "@mui/material";
 import NextLink from "next/link";
 import { useContext } from "react";
+import {
+  Box,
+  Divider,
+  Grid,
+  Link,
+  Typography,
+  FormControl,
+  InputLabel, Input, InputAdornment, TextField,
+} from "@mui/material";
+
 import { AuthContext } from "../../context";
 import { useAllUsers, useCipher } from "../../hooks";
 import { FullScreenLoading } from "../../components/ui";
 import UserAllTable from "../../components/ui/TableMap";
+import { AesLayout } from "../../components/layouts";
+import StickyHeadTable from "../../components/ui/Table";
 
 export const SharePage = () => {
-  const { user, isLoggedIn, logout } = useContext(AuthContext);
+  const { user, isLoggedIn } = useContext(AuthContext);
 
   const { data, isLoading } = useCipher(`${user?.name}`);
   const { users, isLoadingAll } = useAllUsers();
-  console.log(users);
-  // @ts-ignore
-  // @ts-ignore
+
   return (
     <AesLayout
       title={"AES - Share"}
@@ -60,7 +67,7 @@ export const SharePage = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                maxWidth: "75rem",
+                maxWidth: "92rem",
               }}
             >
               {isLoading ? (
@@ -70,13 +77,19 @@ export const SharePage = () => {
                 <StickyHeadTable ciphers={data} />
               )}
               <br />
+              <Divider sx={{ my: 2 }} />
 
               {isLoadingAll ? (
                 <FullScreenLoading />
               ) : (
                 // @ts-ignore
+
                 <UserAllTable users={users} />
               )}
+
+              <br />
+              <Divider sx={{ my: 2 }} />
+
               <Grid item xs={12} display="flex" justifyContent="end">
                 <NextLink href="/" passHref>
                   <Link underline="always">Regresar al Inicio</Link>

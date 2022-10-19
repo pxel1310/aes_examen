@@ -1,14 +1,14 @@
-import type { NextPage } from "next"
-import { Box, Divider, Typography } from "@mui/material"
+import type { NextPage } from "next";
+import { Box, Divider, Typography } from "@mui/material";
 
-import { AesLayout } from "../components/layouts"
+import { AesLayout } from "../components/layouts";
 
-import { CardInfo } from "../components/ui"
-import { useContext } from "react"
-import { AuthContext } from "../context"
+import { CardInfo } from "../components/ui";
+import { useContext } from "react";
+import { AuthContext } from "../context";
 
 const HomePage: NextPage = () => {
-  const { user, isLoggedIn, logout } = useContext(AuthContext)
+  const { user, isLoggedIn, logout } = useContext(AuthContext);
 
   return (
     <AesLayout
@@ -85,6 +85,10 @@ const HomePage: NextPage = () => {
           />
         )}
       </Box>
+      <br />
+      <br />
+      <br />
+      <Divider sx={{ my: 2 }} />
       <Box
         sx={{
           display: "flex",
@@ -95,15 +99,15 @@ const HomePage: NextPage = () => {
           mt: 4,
         }}
       >
-        <Typography variant="h6" component="h2" className="fadeIn">
-          Realizado por: <strong>Ayala González Ian</strong>,{" "}
-          <strong>Edwin Uriel Astudillo Perez</strong>,
-          <strong>Axel Gomez Herrera</strong>,
+        <Typography variant="h6" component="h2">
+          Realizado por: <strong>Ayala González Ian, </strong>
+          <strong>Edwin Uriel Astudillo Perez, </strong>
+          <strong>Axel Gomez Herrera, </strong>
           <strong>Garcia Gomez Jaret Xchel</strong>
         </Typography>
       </Box>
     </AesLayout>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

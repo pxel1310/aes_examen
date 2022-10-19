@@ -1,9 +1,13 @@
 import useSWR, { SWRConfiguration } from "swr";
-import {ICipher} from "../interfaces";
 
-export const useAllUsers = ( config: SWRConfiguration = {}) => {
-  const { data, error } = useSWR<ICipher>(`/api/user/allUsers`, config);
-  let users = data
+interface IAllUsers {
+  name: string;
+  email: string;
+}
+
+export const useAllUsers = (config: SWRConfiguration = {}) => {
+  const { data, error } = useSWR<IAllUsers>(`/api/user/allUsers`, config);
+  let users = data;
 
   return {
     users,
