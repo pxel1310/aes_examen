@@ -3,15 +3,11 @@ import { AesLayout } from "../../components/layouts";
 import { NextPage } from "next";
 import {
   Box,
-  Button,
   Divider,
   FormControlLabel,
   FormLabel,
   Grid,
-  Link,
-  MenuItem,
   RadioGroup,
-  TextField,
   Typography,
   Radio,
   Alert,
@@ -19,28 +15,12 @@ import {
   Stack,
 } from "@mui/material";
 
-import Swal from "sweetalert2";
-
-import NextLink from "next/link";
-
-import { encrypt, decrypt } from "../../utils/AES";
 import { AuthContext } from "../../context";
 
-import { useForm } from "react-hook-form";
-import { aesName } from "../../api";
 import CipherForm from "../../components/ui/CipherForm";
 import DecipherForm from "../../components/ui/DecipherForm";
 
-type FormData = {
-  user: string;
-  type: string;
-  cipher: number;
-  message: string;
-  messagein: string;
-  key: string;
-};
-
-export const CipherPage: NextPage = () => {
+const CipherPage: NextPage = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
   const [value1, setValue1] = useState("cifrar");
@@ -152,3 +132,4 @@ export const CipherPage: NextPage = () => {
 };
 
 export default CipherPage;
+

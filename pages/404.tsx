@@ -1,7 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { AesLayout } from "../components/layouts";
+import {NextPage} from "next";
 
-const Custom404 = () => {
+const Custom404: NextPage = () => {
   return (
     <AesLayout
       title="Page not found"

@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context";
 import { AuthLayout } from "../../components/layouts";
 import { validations } from "../../utils";
+import { NextPage } from "next";
 
 type FormData = {
   name: string;
@@ -23,7 +24,7 @@ type FormData = {
   password: string;
 };
 
-const RegisterPage = () => {
+const RegisterPage: NextPage = () => {
   const router = useRouter();
   const { registerUser } = useContext(AuthContext);
 
@@ -50,7 +51,7 @@ const RegisterPage = () => {
     router.replace(destination);
   };
 
-  const { user, isLoggedIn, logout } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <AuthLayout title={"Ingresar"}>

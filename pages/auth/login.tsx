@@ -18,13 +18,14 @@ import { AuthContext } from "../../context";
 import { AuthLayout } from "../../components/layouts";
 import { validations } from "../../utils";
 import { useRouter } from "next/router";
+import {NextPage} from "next";
 
 type FormData = {
   email: string;
   password: string;
 };
 
-const LoginPage = () => {
+const LoginPage: NextPage = () => {
   const router = useRouter();
   const { loginUser } = useContext(AuthContext);
 

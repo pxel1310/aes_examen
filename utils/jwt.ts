@@ -6,7 +6,7 @@ export const signToken = (_id: string, email: string) => {
   }
 
   return jwt.sign({ _id, email }, process.env.JWT_SECRET_SEED, {
-    expiresIn: "30d",
+    expiresIn: "5min",
   });
 };
 
